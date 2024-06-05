@@ -3,7 +3,7 @@ import noteImg from "../assets/no-projects.png";
 import Button from "./Button";
 export default function NoProjectSelected({onStartAddProject}) {
   return (
-    <div className="w-2/3 text-center mt-24 ">
+    <div className="w-2/3 text-center mt-24 z-0">
       <img
         src={noteImg}
         alt="no project selected"

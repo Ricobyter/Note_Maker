@@ -1,17 +1,30 @@
 import React from "react";
 import Button from "./Button";
+import { RxCross2 } from "react-icons/rx";
 
 export default function Sidebar({
   onStartAddProject,
   projects,
   onSelectProject,
   selectedProjectId,
+  isOpen,
+  togglebar
 }) {
+  const sidebarClass = isOpen ? "w-[55vw] md:static   md:w-72 z-50 fixed top-0 left-0 h-screen" : "w-0 overflow-hidden md:w-72 p-0 hidden";
   return (
-    <aside className="w-1/3 px-8 py-16 bg-stone-900 text-stone-50 md:w-72 ">
+    <div className={`z-10 bg-stone-900 text-stone-50  ${sidebarClass}`}>
+      <div className="text-stone-200 text-xl pt-4 font-bold  absolute right-4 md:hidden" onClick={togglebar}>
+      <RxCross2 />
+      </div>
+      <div className=" px-8 py-16">
+
+      
+        
       <h1 className="mb-8 font-bold uppercase md:text-xl text-stone-200">
         Your Projects
       </h1>
+
+
       <div>
         <Button onClick={onStartAddProject}>+ Add Project</Button>
       </div>
@@ -38,6 +51,7 @@ export default function Sidebar({
           );
         })}
       </ul>
-    </aside>
+      </div>
+    </div>
   );
 }

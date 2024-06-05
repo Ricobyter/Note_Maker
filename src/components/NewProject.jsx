@@ -38,7 +38,7 @@ export default function NewProject({ onAdd, onCancel }) {
           Please fill valid input for every field
         </p>
       </Modal>
-      <div className="w-[36rem] mt-16">
+      <div className="w-[20rem] md:w-[36rem] mt-16 z-0">
         <menu className="flex items-center justify-end gap-2 my-4">
           <li>
             <button className="text-stone-800 hover:text-black" onClick={onCancel}>Cancel</button>

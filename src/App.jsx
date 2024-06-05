@@ -1,15 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import NewProject from "./components/NewProject";
 import SelectedProject from "./components/SelectedProject";
 import NoProjectSelected from "./components/NoProjectSelected";
 import Sidebar from "./components/Sidebar";
+import { GiHamburgerMenu } from "react-icons/gi";
 
 function App() {
-  const [projectsState, setProjectsState] = useState({
-    projects: [],
-    selectedProjectId: undefined,
-    tasks: [],
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true); // New state for sidebar open/close
+
+  function toggleSideBar() {
+    setIsSidebarOpen((prevState) => !prevState);
+  }
+
+  const [projectsState, setProjectsState] = useState(() => {
+    // Retrieve projects from localStorage or initialize an empty array
+    const storedProjects = JSON.parse(localStorage.getItem("projects")) || [];
+    // Retrieve tasks from localStorage or initialize an empty array
+    const storedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    return {
+      projects: storedProjects,
+      selectedProjectId: undefined,
+      tasks: storedTasks,
+    };
   });
+
+  useEffect(() => {
+    localStorage.setItem("projects", JSON.stringify(projectsState.projects));
+    localStorage.setItem("tasks", JSON.stringify(projectsState.tasks));
+  }, [projectsState.projects, projectsState.tasks]);
 
   function handleStartAddProject() {
     setProjectsState((prevState) => {
@@ -84,9 +102,7 @@ function App() {
     setProjectsState((prevState) => {
       return {
         ...prevState,
-        tasks: prevState.tasks.filter(
-          (task) => task.id !== id
-        ),
+        tasks: prevState.tasks.filter((task) => task.id !== id),
       };
     });
   }
@@ -102,7 +118,6 @@ function App() {
       onAddTask={handleAddTask}
       onDeleteTask={handleDeleteTask}
       tasks={projectsState.tasks}
-      
     />
   );
 
@@ -113,14 +128,25 @@ function App() {
   } else if (projectsState.selectedProjectId === undefined) {
     contents = <NoProjectSelected onStartAddProject={handleStartAddProject} />;
   }
+
+  const hmenu = isSidebarOpen ? "hidden" : "block";
   return (
     <main className="h-screen  flex gap-8">
+      <div className={`md:hidden pt-2 pl-2`}>
+        <GiHamburgerMenu
+          className={`text-2xl cursor-pointer`}
+          onClick={toggleSideBar}
+        />
+      </div>
       <Sidebar
         onStartAddProject={handleStartAddProject}
         projects={projectsState.projects}
         onSelectProject={handleSelectProject}
         selectedProjectId={projectsState.selectedProjectId}
+        isOpen={isSidebarOpen} 
+        togglebar = {toggleSideBar}
       />
+
       {contents}
     </main>
   );
